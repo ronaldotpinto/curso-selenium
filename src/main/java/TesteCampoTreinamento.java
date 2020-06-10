@@ -122,7 +122,22 @@ public class TesteCampoTreinamento {
 		WebDriver driver = new ChromeDriver();
 		driver.manage().window().setSize(new Dimension(1220, 765));
 		driver.get(url);
-				
-		driver.findElement(By.id("buttonSimple"));
+		WebElement element = driver.findElement(By.id("buttonSimple"));		
+		element.click();
+		
+		Assert.assertEquals("Obrigado!", element.getAttribute("value"));
+		driver.quit();
+	}
+	
+	@Test
+	public void interagirLink(){
+		WebDriver driver = new ChromeDriver();
+		driver.manage().window().setSize(new Dimension(1220, 765));
+		driver.get(url);
+		driver.findElement(By.linkText("Voltar")).click();
+		
+		WebElement element = driver.findElement(By.id("resultado"));
+		Assert.assertEquals("Voltou!", element.getText());
+		driver.quit();
 	}
 }
