@@ -8,7 +8,7 @@ import org.openqa.selenium.support.ui.Select;
 
 public class TesteCadastro {
 	
-String url = "file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html";
+	String url = "file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html";
 	
 	@Test
 	public void validarCadastroSimples(){
