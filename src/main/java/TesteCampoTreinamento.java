@@ -66,8 +66,6 @@ public class TesteCampoTreinamento {
 		driver.get(url);
 		WebElement element = driver.findElement(By.id("elementosForm:escolaridade"));
 		Select combo = new Select(element);
-		//combo.selectByIndex(3);
-		//combo.selectByValue("2grauincomp");
 		combo.selectByVisibleText("1o grau completo");
 		Assert.assertEquals("1o grau completo", combo.getFirstSelectedOption().getText());
 		
