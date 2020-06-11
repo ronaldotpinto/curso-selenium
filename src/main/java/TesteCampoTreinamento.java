@@ -136,8 +136,18 @@ public class TesteCampoTreinamento {
 		driver.get(url);
 		driver.findElement(By.linkText("Voltar")).click();
 		
-		WebElement element = driver.findElement(By.id("resultado"));
-		Assert.assertEquals("Voltou!", element.getText());
+		Assert.assertEquals("Voltou!", driver.findElement(By.id("resultado")).getText());
+		driver.quit();
+	}
+	
+	@Test
+	public void buscarTextoPagina(){
+		WebDriver driver = new ChromeDriver();
+		driver.manage().window().setSize(new Dimension(1220, 765));
+		driver.get(url);
+				
+		Assert.assertEquals("Campo de Treinamento", driver.findElement(By.tagName("h3")).getText());
+		Assert.assertEquals("Cuidado onde clica, muitas armadilhas...", driver.findElement(By.className("facilAchar")).getText());
 		driver.quit();
 	}
 }
