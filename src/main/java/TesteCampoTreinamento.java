@@ -1,5 +1,6 @@
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.After;
@@ -23,6 +24,7 @@ public class TesteCampoTreinamento {
 		driver = new ChromeDriver();
 		driver.manage().window().setSize(new Dimension(1200, 765));
 		driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
+		dsl = new DSL(driver);
 	}
 	
 	@After
@@ -37,9 +39,17 @@ public class TesteCampoTreinamento {
 	}
 	
 	@Test
+	public void interagirTextFieldDuplo() {
+		dsl.escreve("elementosForm:nome", "Ronaldo");
+		Assert.assertEquals("Ronaldo", dsl.obterValorCampo("elementosForm:nome"));
+		dsl.escreve("elementosForm:nome", "Trindade");
+		Assert.assertEquals("Trindade", dsl.obterValorCampo("elementosForm:nome"));		
+	}
+	
+	@Test
 	public void interagirTextArea(){
-		dsl.escreve("elementosForm:sugestoes", "Teste\\n\\nNova Linha\\nÚltima Linha");
-		Assert.assertEquals("Teste", dsl.obterValorCampo("elementosForm:sugestoes"));		
+		dsl.escreve("elementosForm:sugestoes", "Teste\n\nNova Linha\nÚltima Linha");
+		Assert.assertEquals("Teste\n\nNova Linha\nÚltima Linha", dsl.obterValorCampo("elementosForm:sugestoes"));		
 	}
 	
 	@Test
@@ -56,43 +66,28 @@ public class TesteCampoTreinamento {
 	
 	@Test
 	public void interagirComboBox(){
-		dsl.selecionarCombo("elementosForm:escolaridade", "1o grau completo");
-		Assert.assertEquals("1o grau completo", dsl.obterValorCombo("elementosForm:escolaridade"));		
+		dsl.selecionarValorCombo("elementosForm:escolaridade", "1o grau completo");
+		Assert.assertEquals("1o grau completo", dsl.obterValorSelecionadoCombo("elementosForm:escolaridade"));		
 	}
 	
 	@Test
 	public void validarComboBox(){
-		WebElement element = driver.findElement(By.id("elementosForm:escolaridade"));
-		Select combo = new Select(element);
-		List<WebElement> options = combo.getOptions();
-		Assert.assertEquals(8, options.size());
-		
-		Boolean encontrou = false;
-		
-		for(WebElement option: options) {
-			if (option.getText().equals("Mestrado")) {
-				encontrou = true;
-				break;
-			}
-		}
-		Assert.assertTrue(encontrou);		
+		Assert.assertEquals(8, dsl.obterQuantidadeOptionsCombo(By.id("elementosForm:escolaridade")));
+		Assert.assertTrue(dsl.validarOptionsCombo(By.id("elementosForm:escolaridade"), "Mestrado"));		
 	}
 	
 	@Test
 	public void interagirComboMulti(){
-		dsl.selecionarCombo("elementosForm:esportes", "Natacao");
-		dsl.selecionarCombo("elementosForm:esportes", "Corrida");
-		dsl.selecionarCombo("elementosForm:esportes", "O que eh esporte?");
+		dsl.selecionarValorCombo("elementosForm:esportes", "Natacao");
+		dsl.selecionarValorCombo("elementosForm:esportes", "Corrida");
+		dsl.selecionarValorCombo("elementosForm:esportes", "O que eh esporte?");
 		
-		WebElement element = driver.findElement(By.id("elementosForm:esportes"));
-		Select combo = new Select(element);
+		List<WebElement> opcoesMarcadas = dsl.obterOpcaoesMarcadasCombo(By.id("elementosForm:esportes"));
+		Assert.assertEquals(3, opcoesMarcadas.size());
 		
-		List<WebElement> allSectedOptions = combo.getAllSelectedOptions();
-		Assert.assertEquals(3, allSectedOptions.size());
-		
-		combo.deselectByVisibleText("Corrida");
-		allSectedOptions = combo.getAllSelectedOptions();
-		Assert.assertEquals(2, allSectedOptions.size());
+		dsl.deselecionarValorCombo("elementosForm:esportes", "Corrida");
+		opcoesMarcadas = dsl.obterOpcaoesMarcadasCombo(By.id("elementosForm:esportes"));
+		Assert.assertEquals(2, opcoesMarcadas.size());
 	}
 	
 	@Test
