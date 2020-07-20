@@ -2,6 +2,7 @@ import java.util.List;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
@@ -113,6 +114,7 @@ public class DSL {
 		return texto;
 	}
 	
+	/*********** Frames e Janelas ****************/
 	public void alterarFrame(String frame) {
 		driver.switchTo().frame(frame);		
 	}
@@ -127,5 +129,12 @@ public class DSL {
 	
 	public void fecharJanelaAtual() {
 		driver.close();
+	}
+	
+	/*********************** JS ************************/
+	
+	public Object executarJS(String cmd, Object... param) {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		return js.executeScript(cmd, param);
 	}
 }

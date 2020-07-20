@@ -6,6 +6,7 @@ import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 public class TesteFramesJanelas {
@@ -35,6 +36,17 @@ public class TesteFramesJanelas {
 		
 		dsl.alterarFramePadrao();
 		dsl.escreve("elementosForm:nome", textoAlert);		
+	}
+	
+	@Test
+	public void interagirFrameOculto() {
+		WebElement frame = driver.findElement(By.id("frame2"));
+		dsl.executarJS("window.scrollBy(0, arguments[0])", frame.getLocation().y);
+		
+		dsl.alterarFrame("frame2");
+		dsl.clicar("frameButton");
+		String msg = dsl.textoAlertAccept();
+		Assert.assertEquals("Frame OK!", msg);
 	}
 	
 	@Test

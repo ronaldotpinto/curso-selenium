@@ -1,6 +1,5 @@
 import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.After;
@@ -9,15 +8,16 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.Select;
 
 public class TesteCampoTreinamento {
 	
 	private WebDriver driver;
 	private DSL dsl;
+	private CampoTreinamentoPage page;
 	
 	@Before
 	public void inicializa() {
@@ -25,11 +25,12 @@ public class TesteCampoTreinamento {
 		driver.manage().window().setSize(new Dimension(1200, 765));
 		driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
 		dsl = new DSL(driver);
+		page = new CampoTreinamentoPage(driver);
 	}
 	
 	@After
 	public void finaliza() {
-		driver.quit();
+//		driver.quit();
 	}
 	
 	@Test
@@ -108,5 +109,16 @@ public class TesteCampoTreinamento {
 	public void buscarTextoPagina(){
 		Assert.assertEquals("Campo de Treinamento", dsl.obterTexto(By.tagName("h3")));
 		Assert.assertEquals("Cuidado onde clica, muitas armadilhas...", dsl.obterTexto(By.className("facilAchar")));
+	}
+	
+	@Test
+	public void testeJavascript() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+//		js.executeScript("alert('Testando JS via Selenium')");
+		js.executeScript("document.getElementById('elementosForm:nome').value = 'Escrito via JS'");
+		js.executeScript("document.getElementById('elementosForm:sobrenome').type = 'radio'");
+		
+		WebElement element = driver.findElement(By.id("elementosForm:nome"));
+		js.executeScript("arguments[0].style.border = arguments[1]", element, "solid 4px red");
 	}
 }
