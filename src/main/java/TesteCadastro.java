@@ -36,7 +36,7 @@ public class TesteCadastro {
 
 		Assert.assertEquals("Cadastrado!", page.getResultadoCadastro());
 		Assert.assertEquals("Ronaldo", page.getNomeCadastro());
-		Assert.assertEquals("Pinto", page.getSobreomeCadastro());
+		Assert.assertEquals("Pinto" , page.getSobreomeCadastro());
 		Assert.assertEquals("Masculino", page.getSexoCadastro());
 		Assert.assertEquals("Pizza", page.getComidaCadastro());
 		Assert.assertEquals("mestrado", page.getEscolaridadeCadastro());
