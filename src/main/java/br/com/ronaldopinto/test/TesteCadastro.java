@@ -1,27 +1,22 @@
-import org.junit.After;
+package br.com.ronaldopinto.test;
+
+import static br.com.ronaldopinto.core.DriverFactory.getDriver;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 
-public class TesteCadastro {
+import br.com.ronaldopinto.core.BaseTest;
+import br.com.ronaldopinto.page.CampoTreinamentoPage;
 
-	private WebDriver driver;
+public class TesteCadastro extends BaseTest {
+
 	private CampoTreinamentoPage page;
 
 	@Before
 	public void inicializa() {
-		driver = new ChromeDriver();
-		driver.manage().window().setSize(new Dimension(1200, 765));
-		driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
-		page = new CampoTreinamentoPage(driver);
-	}
-
-	@After
-	public void finaliza() {
-		driver.quit();
+		getDriver().get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
+		page = new CampoTreinamentoPage();
 	}
 
 	@Test
@@ -36,7 +31,7 @@ public class TesteCadastro {
 
 		Assert.assertEquals("Cadastrado!", page.getResultadoCadastro());
 		Assert.assertEquals("Ronaldo", page.getNomeCadastro());
-		Assert.assertEquals("Pinto" , page.getSobreomeCadastro());
+		Assert.assertEquals("Pinto", page.getSobreomeCadastro());
 		Assert.assertEquals("Masculino", page.getSexoCadastro());
 		Assert.assertEquals("Pizza", page.getComidaCadastro());
 		Assert.assertEquals("mestrado", page.getEscolaridadeCadastro());

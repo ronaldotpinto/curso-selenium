@@ -1,72 +1,71 @@
+package br.com.ronaldopinto.test;
+import static br.com.ronaldopinto.core.DriverFactory.getDriver;
+import static br.com.ronaldopinto.core.DriverFactory.killDriver;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
+
+import br.com.ronaldopinto.core.DSL;
 
 public class TesteFramesJanelas {
-	
-	private WebDriver driver;
+
 	private DSL dsl;
-	
+
 	@Before
 	public void inicializa() {
-		driver = new ChromeDriver();
-		driver.manage().window().setSize(new Dimension(1200, 765));
-		driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
-		dsl = new DSL(driver);
+		getDriver().get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
+		dsl = new DSL();
 	}
-	
+
 	@After
 	public void finaliza() {
-		driver.quit();
+		killDriver();
 	}
-	
+
 	@Test
-	public void interagirFrames(){		
+	public void interagirFrames() {
 		dsl.alterarFrame("frame1");
 		dsl.clicar("frameButton");
 		String textoAlert = dsl.textoAlertAccept();
 		Assert.assertEquals("Frame OK!", textoAlert);
-		
+
 		dsl.alterarFramePadrao();
-		dsl.escreve("elementosForm:nome", textoAlert);		
+		dsl.escreve("elementosForm:nome", textoAlert);
 	}
-	
+
 	@Test
 	public void interagirFrameOculto() {
-		WebElement frame = driver.findElement(By.id("frame2"));
+		WebElement frame = getDriver().findElement(By.id("frame2"));
 		dsl.executarJS("window.scrollBy(0, arguments[0])", frame.getLocation().y);
-		
+
 		dsl.alterarFrame("frame2");
 		dsl.clicar("frameButton");
 		String msg = dsl.textoAlertAccept();
 		Assert.assertEquals("Frame OK!", msg);
 	}
-	
+
 	@Test
-	public void interagirPopups(){		
+	public void interagirPopups() {
 		dsl.clicar("buttonPopUpEasy");
 		dsl.alterarJanela("Popup");
 		dsl.escreve(By.tagName("textarea"), "Deu certo?");
 		dsl.fecharJanelaAtual();
-		
+
 		dsl.alterarJanela("");
-		dsl.escreve(By.tagName("textarea"), "e agora?");		
+		dsl.escreve(By.tagName("textarea"), "e agora?");
 	}
-	
+
 	@Test
-	public void interagirPopupsGenericas(){		
+	public void interagirPopupsGenericas() {
 		dsl.clicar("buttonPopUpHard");
-		dsl.alterarJanela(driver.getWindowHandles().toArray()[1].toString());
+		dsl.alterarJanela(getDriver().getWindowHandles().toArray()[1].toString());
 		dsl.escreve(By.tagName("textarea"), "Deu certo?");
-		dsl.alterarJanela(driver.getWindowHandles().toArray()[0].toString());
-		dsl.escreve(By.tagName("textarea"), "e agora?");		
+		dsl.alterarJanela(getDriver().getWindowHandles().toArray()[0].toString());
+		dsl.escreve(By.tagName("textarea"), "e agora?");
 	}
-	
+
 }
